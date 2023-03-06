@@ -7,7 +7,7 @@ parser = argparse.ArgumentParser('Scan k8s api')
 
 url_group = parser.add_mutually_exclusive_group(required=True)
 url_group.add_argument('--url', help='url to scan')
-url_group.add_argument('--url-file', help='urls to scan, one by line, only scheme+host (ex: https://k8s.example.com)')
+url_group.add_argument('--url-file', help='urls to scan, one by line, only scheme+host (ex: https://k8s.example.com)\nYou can fill it with the command "kubectl get --raw / | jq \'.paths[]\' "')
 
 path_group = parser.add_mutually_exclusive_group()
 path_group.add_argument('--path', help='url to scan')

@@ -1,8 +1,7 @@
 import argparse
-import requests
-import urllib3
-from requests.exceptions import SSLError
-from urllib3.exceptions import InsecureRequestWarning
+
+from check import check
+from utils import NumberedToken
 
 parser = argparse.ArgumentParser('Scan k8s api')
 
@@ -26,44 +25,6 @@ parser.add_argument('--proxy', help='Use proxy')
 
 args = parser.parse_args()
 
-
-class ReturnStatus:
-
-    def __init__(self, success=True, skip_url=False):
-        self.success = success
-        self.skip_url = skip_url
-
-        if success and skip_url:
-            raise Exception("Bad status, can't success and skip url")
-
-
-class NumberedToken:
-
-    def __init__(self, token: str, number: int):
-        self.token = token
-        self.number = number
-
-
-def check(url: str, path: str, port: str, token: NumberedToken = None) -> ReturnStatus:
-
-    headers = {'Authorization': f'Bearer {token.token}'} if token else {}
-
-    url_ = f'{url.strip("/")}:{port}/{path.strip("/")}'
-
-    try:
-        urllib3.disable_warnings(InsecureRequestWarning)
-        r = requests.get(url_, headers=headers, verify=False)
-
-        if r.status_code < 400:
-            print(f'[+] Find url: {url_} with token {token.number if token else "None"}')
-    except SSLError as e:
-        print(f'[-] SSLError with url {url_}, is the port/scheme correct and the port serving http ? (ex: ssh ports not supported)\n[*] skip this url')
-        print(e)
-        return ReturnStatus(success=False, skip_url=True)
-    except Exception as e:
-        print(f'[-] Error with url {url_}: {str(e)}')
-
-    return ReturnStatus()
 
 if __name__ == '__main__':
 

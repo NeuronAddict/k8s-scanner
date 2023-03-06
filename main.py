@@ -9,9 +9,9 @@ url_group = parser.add_mutually_exclusive_group(required=True)
 url_group.add_argument('--url', help='url to scan')
 url_group.add_argument('--url-file', help='urls to scan, one by line, only scheme+host (ex: https://k8s.example.com)\nYou can fill it with the command "kubectl get --raw / | jq \'.paths[]\' "')
 
-path_group = parser.add_mutually_exclusive_group()
+path_group = parser.add_mutually_exclusive_group(required=True)
 path_group.add_argument('--path', help='url to scan')
-url_group.add_argument('--path-file', help='path to scan, one by line', default='k8s-dico.txt')
+url_group.add_argument('--path-file', help='path to scan, one by line')
 
 port_group = parser.add_mutually_exclusive_group(required=True)
 port_group.add_argument('--port', help='url to scan')
